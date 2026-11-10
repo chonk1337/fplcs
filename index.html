@@ -497,65 +497,6 @@
       line-height: 1.6;
     }
 
-    .viewer-toggle {
-      position: fixed;
-      top: 50%;
-      right: 0;
-      z-index: 1001;
-      padding: 14px 11px;
-      color: #fff;
-      background: var(--orange);
-      border: 1px solid #ff704d;
-      border-right: 0;
-      border-radius: 10px 0 0 10px;
-      writing-mode: vertical-rl;
-      transform: translateY(-50%);
-      box-shadow: 0 5px 24px #ff4b1f55;
-    }
-
-    .viewer-toggle:hover {
-      background: #e83d16;
-      transform: translateY(-50%);
-    }
-
-    .viewer-panel {
-      position: fixed;
-      top: 50%;
-      right: 18px;
-      z-index: 1000;
-      width: min(360px, calc(100vw - 36px));
-      max-height: min(70vh, 560px);
-      padding: 22px;
-      overflow: auto;
-      background: linear-gradient(145deg, #15171c, #0e0f12);
-      border: 1px solid #34363c;
-      border-radius: 14px;
-      box-shadow: 0 24px 80px #000b;
-      opacity: 0;
-      visibility: hidden;
-      transform: translate(20px, -50%);
-      transition: opacity .2s, visibility .2s, transform .2s;
-    }
-
-    .viewer-panel.is-open {
-      opacity: 1;
-      visibility: visible;
-      transform: translate(0, -50%);
-    }
-
-    .viewer-panel h2 {
-      margin: 0 0 16px;
-      font-size: 20px;
-    }
-
-    #ts3viewer_1131403 {
-      min-height: 40px;
-      overflow-x: auto;
-      color: var(--muted);
-    }
-
-    #ts3viewer_1131403 iframe { max-width: 100%; }
-
     .steps {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -712,15 +653,6 @@
         max-height: 85vh;
       }
 
-      .viewer-panel {
-        top: auto;
-        right: 12px;
-        bottom: 12px;
-        max-height: 65vh;
-        transform: translateY(20px);
-      }
-
-      .viewer-panel.is-open { transform: translateY(0); }
       .game-modal { padding: 12px; }
 
       .game-frame {
@@ -902,19 +834,6 @@
   </main>
 
   <button
-    class="viewer-toggle"
-    id="viewer-toggle"
-    type="button"
-    aria-expanded="false"
-    aria-controls="viewer-panel"
-  >Кто на сервере</button>
-
-  <aside class="viewer-panel" id="viewer-panel" aria-label="Пользователи TeamSpeak">
-    <h2>Кто сейчас на сервере</h2>
-    <div id="ts3viewer_1131403"></div>
-  </aside>
-
-  <button
     class="secret-game-button"
     id="secret-game-button"
     type="button"
@@ -961,14 +880,6 @@
       button.textContent = "Скопировано!";
       setTimeout(() => button.textContent = "Копировать", 1500);
     }
-
-    const viewerToggle = document.getElementById("viewer-toggle");
-    const viewerPanel = document.getElementById("viewer-panel");
-
-    viewerToggle.addEventListener("click", () => {
-      const isOpen = viewerPanel.classList.toggle("is-open");
-      viewerToggle.setAttribute("aria-expanded", String(isOpen));
-    });
 
     const channelToggle = document.getElementById("channel-toggle");
     const channelPanel = document.getElementById("channel-panel");
@@ -1028,13 +939,6 @@
       document.getElementById("form-note").textContent =
         "Открылся Telegram с заполненной заявкой. Проверь сообщение и отправь его администратору.";
     });
-  </script>
-
-  <script src="https://static.tsviewer.com/short_expire/js/ts3viewer_loader.js"></script>
-  <script>
-    var ts3v_url_1 = "https://www.tsviewer.com/ts3viewer.php?ID=1131403&text=757575&text_size=12&text_family=1&text_s_color=000000&text_s_weight=normal&text_s_style=normal&text_s_variant=normal&text_s_decoration=none&text_i_color=&text_i_weight=normal&text_i_style=normal&text_i_variant=normal&text_i_decoration=none&text_c_color=&text_c_weight=normal&text_c_style=normal&text_c_variant=normal&text_c_decoration=none&text_u_color=000000&text_u_weight=normal&text_u_style=normal&text_u_variant=normal&text_u_decoration=none&text_s_color_h=&text_s_weight_h=bold&text_s_style_h=normal&text_s_variant_h=normal&text_s_decoration_h=none&text_i_color_h=000000&text_i_weight_h=bold&text_i_style_h=normal&text_i_variant_h=normal&text_i_decoration_h=none&text_c_color_h=&text_c_weight_h=normal&text_c_style_h=normal&text_c_variant_h=normal&text_c_decoration_h=none&text_u_color_h=&text_u_weight_h=bold&text_u_style_h=normal&text_u_variant_h=normal&text_u_decoration_h=none&iconset=default";
-
-    ts3v_display.init(ts3v_url_1, 1131403, 100);
   </script>
 </body>
 </html>
