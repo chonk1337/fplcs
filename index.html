@@ -598,6 +598,44 @@
       opacity: 1;
     }
 
+    .snow-toggle {
+      position: fixed;
+      right: 14px;
+      bottom: 70px;
+      z-index: 1100;
+      padding: 11px 16px;
+      color: var(--muted);
+      background: #ffffff06;
+      border: 1px solid #ffffff12;
+      border-radius: 9px;
+      font-size: 13px;
+      font-weight: 700;
+      opacity: .95;
+      transition: .2s;
+    }
+
+    .snow-toggle.is-active {
+      color: #fff;
+      background: var(--orange);
+      border-color: var(--orange);
+      box-shadow: 0 5px 24px #ff4b1f33;
+    }
+
+    .snow-toggle:hover {
+      color: #fff;
+      background: var(--orange);
+      border-color: var(--orange);
+    }
+
+    #snow-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9998;
+    }
+
     .game-modal {
       position: fixed;
       inset: 0;
@@ -666,6 +704,7 @@
       #server-ip { font-size: 11px; letter-spacing: -0.6px; }
       .value-row button { padding: 7px 6px; font-size: 11px; }
       .secret-game-button { font-size: 12px; padding: 11px 12px; }
+      .snow-toggle { font-size: 11px; padding: 9px 12px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -677,6 +716,8 @@
   </style>
 </head>
 <body>
+  <canvas id="snow-canvas" aria-hidden="true"></canvas>
+
   <header class="wrap">
     <a class="brand" href="#" aria-label="FPLCS — главная">
       <img
@@ -834,6 +875,14 @@
   </main>
 
   <button
+    class="snow-toggle"
+    id="snow-toggle"
+    type="button"
+    aria-pressed="true"
+    title="Включить или выключить снег"
+  >❄ Снег: вкл</button>
+
+  <button
     class="secret-game-button"
     id="secret-game-button"
     type="button"
@@ -939,6 +988,110 @@
       document.getElementById("form-note").textContent =
         "Открылся Telegram с заполненной заявкой. Проверь сообщение и отправь его администратору.";
     });
+
+    /* ---------- Снег (Canvas) ---------- */
+    (function () {
+      const canvas = document.getElementById("snow-canvas");
+      const ctx = canvas.getContext("2d");
+      const toggleBtn = document.getElementById("snow-toggle");
+
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      let width = 0;
+      let height = 0;
+      let snowflakes = [];
+      let animationId = null;
+      let running = false;
+
+      const MAX_SNOWFLAKES = 80;
+
+      function resize() {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+      }
+
+      function createSnowflakes() {
+        snowflakes = [];
+        for (let i = 0; i < MAX_SNOWFLAKES; i++) {
+          snowflakes.push({
+            x: Math.random() * width,
+            y: Math.random() * height,
+            r: Math.random() * 2 + 1,
+            speed: Math.random() * 1 + 0.4,
+            wind: Math.random() * 0.5 - 0.25,
+            opacity: Math.random() * 0.5 + 0.3
+          });
+        }
+      }
+
+      function drawSnow() {
+        ctx.clearRect(0, 0, width, height);
+
+        for (const flake of snowflakes) {
+          ctx.beginPath();
+          ctx.arc(flake.x, flake.y, flake.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(220, 235, 255, ${flake.opacity})`;
+          ctx.fill();
+
+          flake.y += flake.speed;
+          flake.x += flake.wind;
+
+          if (flake.y > height + 5) {
+            flake.y = -5;
+            flake.x = Math.random() * width;
+          }
+          if (flake.x > width + 5) flake.x = -5;
+          if (flake.x < -5) flake.x = width + 5;
+        }
+
+        animationId = requestAnimationFrame(drawSnow);
+      }
+
+      function startSnow() {
+        if (running) return;
+        if (reducedMotion) return;
+        if (!width || !height) resize();
+        if (!snowflakes.length) createSnowflakes();
+        running = true;
+        animationId = requestAnimationFrame(drawSnow);
+        toggleBtn.classList.add("is-active");
+        toggleBtn.setAttribute("aria-pressed", "true");
+        toggleBtn.textContent = "❄ Снег: вкл";
+      }
+
+      function stopSnow() {
+        running = false;
+        if (animationId) cancelAnimationFrame(animationId);
+        animationId = null;
+        ctx.clearRect(0, 0, width, height);
+        toggleBtn.classList.remove("is-active");
+        toggleBtn.setAttribute("aria-pressed", "false");
+        toggleBtn.textContent = "❄ Снег: выкл";
+      }
+
+      toggleBtn.addEventListener("click", () => {
+        if (running) {
+          stopSnow();
+        } else {
+          startSnow();
+        }
+      });
+
+      window.addEventListener("resize", () => {
+        resize();
+        if (running) createSnowflakes();
+      });
+
+      resize();
+
+      if (reducedMotion) {
+        toggleBtn.textContent = "❄ Снег: выкл";
+        toggleBtn.setAttribute("aria-pressed", "false");
+        toggleBtn.title = "Анимации отключены в настройках системы";
+      } else {
+        startSnow();
+      }
+    })();
   </script>
 </body>
 </html>
