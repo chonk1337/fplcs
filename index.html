@@ -1,0 +1,1070 @@
+<?php
+$logo = 'image%20(4).jpg';
+$headerLogo = 'icons8-faceit-24.png';
+?>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#08090b">
+  <title>FPLCS — TeamSpeak сервер</title>
+
+  <style>
+    html {
+      scrollbar-color: #ff4b1f99 transparent;
+      scrollbar-width: thin;
+    }
+
+    html::-webkit-scrollbar { width: 10px; }
+    html::-webkit-scrollbar-track { background: transparent; }
+    html::-webkit-scrollbar-thumb {
+      background: #ff4b1f99;
+      border: 3px solid transparent;
+      border-radius: 999px;
+      background-clip: content-box;
+    }
+    html::-webkit-scrollbar-thumb:hover { background-color: #ff4b1f; }
+
+    :root {
+      --bg: #08090b;
+      --orange: #ff4b1f;
+      --white: #f4f5f7;
+      --muted: #a1a5ad;
+      --border: #282b31;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      overflow-x: hidden;
+      background:
+        radial-gradient(ellipse at 50% -12%, #492014 0, transparent 42%),
+        radial-gradient(circle at 8% 42%, #ff4b1f0b 0, transparent 26%),
+        radial-gradient(circle at 94% 70%, #ff4b1f0a 0, transparent 25%),
+        var(--bg);
+      color: var(--white);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body::before {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background-image:
+        linear-gradient(#ffffff05 1px, transparent 1px),
+        linear-gradient(90deg, #ffffff05 1px, transparent 1px);
+      background-size: 48px 48px;
+      content: "";
+      mask-image: linear-gradient(to bottom, #000, transparent 75%);
+      pointer-events: none;
+    }
+
+    .wrap {
+      width: min(100% - 40px, 1080px);
+      margin: 0 auto;
+    }
+
+    header {
+      height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+    }
+
+    .brand img.header-logo {
+      display: block;
+      width: 24px;
+      height: 24px;
+      object-fit: contain;
+    }
+
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 9px 13px;
+      color: #c4c8ce;
+      background: #ffffff06;
+      border: 1px solid #ffffff12;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .3px;
+      white-space: nowrap;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      flex: 0 0 8px;
+      border-radius: 50%;
+      background: #f0b84b;
+      box-shadow: 0 0 12px #f0b84b88;
+    }
+
+    .dot.is-online {
+      background: #4bd783;
+      box-shadow: 0 0 12px #4bd78388;
+    }
+
+    .dot.is-offline {
+      background: #ff4b4b;
+      box-shadow: 0 0 12px #ff4b4b88;
+    }
+
+    .dot.is-checking {
+      background: #f0b84b;
+      box-shadow: 0 0 12px #f0b84b88;
+    }
+
+    main { padding: 50px 0 68px; }
+
+    .hero {
+      max-width: 760px;
+      margin: 0 auto 56px;
+      text-align: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+      color: var(--orange);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before,
+    .eyebrow::after {
+      width: 22px;
+      height: 1px;
+      background: var(--orange);
+      content: "";
+      opacity: .7;
+    }
+
+    .hero-logo { margin: 0 0 18px; }
+
+    .hero-logo img {
+      display: block;
+      width: min(100%, 520px);
+      max-height: 250px;
+      margin: 0 auto;
+      object-fit: contain;
+      mix-blend-mode: screen;
+    }
+
+    .hero p {
+      margin: 0 auto;
+      max-width: 570px;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.75;
+    }
+
+    .card {
+      position: relative;
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 34px;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse at 100% 0%, #ff4b1f0d, transparent 44%),
+        linear-gradient(145deg, #15171c, #0e0f12);
+      border: 1px solid #34363c;
+      border-radius: 18px;
+      box-shadow: 0 24px 80px #0008, inset 0 1px #ffffff08;
+    }
+
+    .card::before {
+      position: absolute;
+      top: 0;
+      left: 34px;
+      width: 72px;
+      height: 2px;
+      background: var(--orange);
+      box-shadow: 0 0 20px #ff4b1f99;
+      content: "";
+    }
+
+    .card h2 { margin: 0 0 8px; font-size: 24px; }
+
+    .sub {
+      margin: 0 0 26px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .connect-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .option {
+      min-width: 0;
+      padding: 20px;
+      background: #090a0d;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      transition: border-color .2s, transform .2s, background .2s;
+    }
+
+    .option:hover {
+      transform: translateY(-2px);
+      background: #0d0e12;
+      border-color: #ff4b1f66;
+    }
+
+    .option-label {
+      margin-bottom: 12px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .value-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      flex-wrap: nowrap;
+      min-width: 0;
+    }
+
+    code {
+      min-width: 0;
+      color: var(--white);
+      font-family: Consolas, "Courier New", monospace;
+      font-size: clamp(12px, 2vw, 18px);
+      overflow-wrap: anywhere;
+    }
+
+    #server-ip {
+      flex: 1 1 auto;
+      white-space: nowrap;
+      font-size: clamp(11px, 1.7vw, 18px);
+      letter-spacing: -0.4px;
+    }
+
+    .value-row button {
+      flex: 0 0 auto;
+      padding: 8px 9px;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    button {
+      color: var(--white);
+      background: #202329;
+      border: 1px solid #343840;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: .2s;
+    }
+
+    button:hover {
+      background: var(--orange);
+      border-color: var(--orange);
+      box-shadow: 0 5px 18px #ff4b1f33;
+    }
+
+    .join-link {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+      text-align: center;
+    }
+
+    .join-link a {
+      display: inline-block;
+      padding: 13px 22px;
+      color: #fff;
+      background: var(--orange);
+      border: 1px solid var(--orange);
+      border-radius: 9px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: .2s;
+    }
+
+    .join-link a:hover {
+      background: transparent;
+      box-shadow: 0 5px 24px #ff4b1f33;
+    }
+
+    .join-link .support-link {
+      color: var(--orange);
+      background: transparent;
+    }
+
+    .join-link .support-link:hover {
+      color: #fff;
+      background: var(--orange);
+    }
+
+    .channel-toggle {
+      position: fixed;
+      top: calc(50% + 140px);
+      right: 0;
+      left: auto;
+      z-index: 1001;
+      padding: 14px 11px;
+      color: #fff;
+      background: var(--orange);
+      border: 1px solid #ff704d;
+      border-right: 0;
+      border-radius: 10px 0 0 10px;
+      writing-mode: vertical-rl;
+      transform: translateY(-50%);
+      box-shadow: 0 5px 24px #ff4b1f55;
+    }
+
+    .channel-toggle:hover {
+      background: #e83d16;
+      transform: translateY(-50%);
+    }
+
+    .channel-panel {
+      position: fixed;
+      top: 50%;
+      left: 18px;
+      z-index: 1000;
+      width: min(520px, calc(100vw - 70px));
+      max-height: 85vh;
+      overflow-y: auto;
+      border-radius: 18px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translate(-20px, -50%);
+      transition: opacity .2s, visibility .2s, transform .2s;
+    }
+
+    .channel-panel.is-open {
+      opacity: 1;
+      visibility: visible;
+      transform: translate(0, -50%);
+    }
+
+    .channel-panel .private-channel { margin: 0; }
+
+    .price-option {
+      display: inline-block;
+      margin: 8px 0 22px;
+    }
+
+    .price-option span {
+      display: flex;
+      min-width: 180px;
+      flex-direction: column;
+      gap: 6px;
+      padding: 14px;
+      background: #090a0d;
+      border: 1px solid var(--orange);
+      border-radius: 10px;
+    }
+
+    .price-option small {
+      color: var(--orange);
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .channel-form {
+      display: grid;
+      gap: 15px;
+    }
+
+    .channel-form > label:not(.agreement) {
+      display: grid;
+      gap: 8px;
+      color: #d9dbe0;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .channel-form input[type="text"] {
+      width: 100%;
+      padding: 12px 13px;
+      color: #fff;
+      background: #090a0d;
+      border: 1px solid #292c33;
+      border-radius: 8px;
+      font: inherit;
+    }
+
+    .channel-form input[type="text"]:focus {
+      border-color: var(--orange);
+      outline: none;
+    }
+
+    .channel-form input::placeholder { color: #777b84; }
+
+    .optional,
+    .form-note {
+      color: #9297a1;
+      font-size: 13px;
+      font-weight: 400;
+    }
+
+    .agreement {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      color: #9297a1;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .agreement input {
+      flex: 0 0 auto;
+      margin-top: 3px;
+      accent-color: var(--orange);
+    }
+
+    .submit-request {
+      padding: 13px 18px;
+      color: #fff;
+      background: var(--orange);
+      border: 1px solid var(--orange);
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .form-note {
+      min-height: 18px;
+      margin: 0;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      max-width: 760px;
+      margin: 24px auto 0;
+    }
+
+    .feature {
+      padding: 22px;
+      background: linear-gradient(145deg, #13151a, #0d0e11);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      transition: transform .2s, border-color .2s;
+    }
+
+    .feature:hover {
+      transform: translateY(-3px);
+      border-color: #ff4b1f66;
+    }
+
+    .feature-icon {
+      display: inline-grid;
+      width: 38px;
+      height: 38px;
+      place-items: center;
+      margin-bottom: 14px;
+      background: #ff4b1f14;
+      border: 1px solid #ff4b1f30;
+      border-radius: 10px;
+      font-size: 19px;
+    }
+
+    .feature h3 {
+      margin: 0 0 8px;
+      font-size: 16px;
+    }
+
+    .feature p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .viewer-toggle {
+      position: fixed;
+      top: 50%;
+      right: 0;
+      z-index: 1001;
+      padding: 14px 11px;
+      color: #fff;
+      background: var(--orange);
+      border: 1px solid #ff704d;
+      border-right: 0;
+      border-radius: 10px 0 0 10px;
+      writing-mode: vertical-rl;
+      transform: translateY(-50%);
+      box-shadow: 0 5px 24px #ff4b1f55;
+    }
+
+    .viewer-toggle:hover {
+      background: #e83d16;
+      transform: translateY(-50%);
+    }
+
+    .viewer-panel {
+      position: fixed;
+      top: 50%;
+      right: 18px;
+      z-index: 1000;
+      width: min(360px, calc(100vw - 36px));
+      max-height: min(70vh, 560px);
+      padding: 22px;
+      overflow: auto;
+      background: linear-gradient(145deg, #15171c, #0e0f12);
+      border: 1px solid #34363c;
+      border-radius: 14px;
+      box-shadow: 0 24px 80px #000b;
+      opacity: 0;
+      visibility: hidden;
+      transform: translate(20px, -50%);
+      transition: opacity .2s, visibility .2s, transform .2s;
+    }
+
+    .viewer-panel.is-open {
+      opacity: 1;
+      visibility: visible;
+      transform: translate(0, -50%);
+    }
+
+    .viewer-panel h2 {
+      margin: 0 0 16px;
+      font-size: 20px;
+    }
+
+    #ts3viewer_1131403 {
+      min-height: 40px;
+      overflow-x: auto;
+      color: var(--muted);
+    }
+
+    #ts3viewer_1131403 iframe { max-width: 100%; }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      max-width: 760px;
+      margin: 24px auto 0;
+    }
+
+    .step {
+      position: relative;
+      min-height: 190px;
+      padding: 23px;
+      overflow: hidden;
+      background: linear-gradient(145deg, #13151a, #0d0e11);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      transition: transform .2s, border-color .2s;
+    }
+
+    .step:hover {
+      transform: translateY(-4px);
+      border-color: #ff4b1f66;
+    }
+
+    .step::after {
+      position: absolute;
+      right: -18px;
+      bottom: -34px;
+      width: 90px;
+      height: 90px;
+      border: 1px solid #ff4b1f18;
+      border-radius: 50%;
+      box-shadow: 0 0 0 12px #ff4b1f08, 0 0 0 24px #ff4b1f05;
+      content: "";
+      pointer-events: none;
+    }
+
+    .number {
+      color: var(--orange);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+    }
+
+    .step h3 { margin: 13px 0 8px; font-size: 17px; }
+
+    .step p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    .download {
+      display: inline-block;
+      margin-top: 12px;
+      color: var(--orange);
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .download:hover { text-decoration: underline; }
+
+    footer {
+      padding: 24px 0;
+      border-top: 1px solid var(--border);
+      color: #777b84;
+      text-align: center;
+      font-size: 13px;
+    }
+
+    footer strong { color: var(--white); }
+
+    .secret-game-button {
+      position: fixed;
+      right: 14px;
+      bottom: 14px;
+      z-index: 1100;
+      width: auto;
+      height: auto;
+      max-width: calc(100vw - 28px);
+      padding: 13px 22px;
+      color: var(--orange);
+      background: transparent;
+      border: 1px solid var(--orange);
+      border-radius: 9px;
+      font-size: 14px;
+      font-weight: 700;
+      opacity: .95;
+      transition: .2s;
+    }
+
+    .secret-game-button:hover,
+    .secret-game-button:focus-visible {
+      color: #fff;
+      background: var(--orange);
+      border-color: var(--orange);
+      box-shadow: 0 5px 24px #ff4b1f33;
+      opacity: 1;
+    }
+
+    .game-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 1099;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: #000d;
+    }
+
+    .game-modal.is-open { display: flex; }
+
+    .game-modal-content {
+      position: relative;
+      width: min(1100px, 100%);
+    }
+
+    .game-close {
+      display: block;
+      margin: 0 0 10px auto;
+      padding: 9px 14px;
+    }
+
+    .game-frame {
+      display: block;
+      width: 100%;
+      height: min(78vh, 760px);
+      min-height: 360px;
+      background: #000;
+      border: 1px solid #34363c;
+      border-radius: 14px;
+    }
+
+    @media (max-width: 650px) {
+      main { padding-top: 40px; }
+
+      .connect-options,
+      .features,
+      .steps { grid-template-columns: 1fr; }
+
+      .card { padding: 25px 20px; }
+      .card::before { left: 20px; }
+      .status { font-size: 11px; }
+      .steps { margin-top: 20px; }
+      .step { min-height: auto; }
+      .hero p { font-size: 15px; }
+
+      .channel-panel {
+        top: 50%;
+        left: 48px;
+        width: calc(100vw - 60px);
+        max-height: 85vh;
+      }
+
+      .viewer-panel {
+        top: auto;
+        right: 12px;
+        bottom: 12px;
+        max-height: 65vh;
+        transform: translateY(20px);
+      }
+
+      .viewer-panel.is-open { transform: translateY(0); }
+      .game-modal { padding: 12px; }
+
+      .game-frame {
+        height: 72vh;
+        min-height: 320px;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .option { padding: 15px 12px; }
+      #server-ip { font-size: 11px; letter-spacing: -0.6px; }
+      .value-row button { padding: 7px 6px; font-size: 11px; }
+      .secret-game-button { font-size: 12px; padding: 11px 12px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="wrap">
+    <a class="brand" href="#" aria-label="FPLCS — главная">
+      <img
+        class="header-logo"
+        src="<?= htmlspecialchars($headerLogo, ENT_QUOTES, 'UTF-8') ?>"
+        alt="Логотип FACEIT"
+      >
+    </a>
+
+    <div class="status" id="server-status" aria-live="polite" aria-label="Статус TeamSpeak-сервера">
+      <span class="dot is-checking" id="status-dot" aria-hidden="true"></span>
+      <span id="status-text">Проверяем сервер…</span>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <div class="eyebrow">Голосовое сообщество</div>
+      <h1 class="hero-logo">
+        <img
+          src="<?= htmlspecialchars($logo, ENT_QUOTES, 'UTF-8') ?>"
+          alt="FPLCS"
+        >
+      </h1>
+      <p>Общайся, собирай команду и играй вместе с нами. Подключайся к голосовому серверу FPLCS — мы рады каждому.</p>
+    </section>
+
+    <section class="card">
+      <h2>Подключиться к серверу</h2>
+      <p class="sub">Открой TeamSpeak и добавь сервер одним из способов:</p>
+
+      <div class="connect-options">
+        <div class="option">
+          <div class="option-label">Прямой IP и порт</div>
+          <div class="value-row">
+            <code id="server-ip">2.26.119.212:9987</code>
+            <button type="button" onclick="copyText('server-ip', this)">Копировать</button>
+          </div>
+        </div>
+
+        <div class="option">
+          <div class="option-label">ID / адрес сервера</div>
+          <div class="value-row">
+            <code id="server-id">fplcs</code>
+            <button type="button" onclick="copyText('server-id', this)">Копировать</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="join-link">
+        <a href="ts3server://2.26.119.212:9987">Подключиться к FPLCS ↗</a>
+        <a
+          class="support-link"
+          href="https://www.donationalerts.com/r/cherryzor"
+          target="_blank"
+          rel="noopener noreferrer"
+        >Поддержать сервер ♥</a>
+      </div>
+    </section>
+
+    <button
+      class="channel-toggle"
+      id="channel-toggle"
+      type="button"
+      aria-expanded="false"
+      aria-controls="channel-panel"
+    >Купить канал</button>
+
+    <aside class="channel-panel" id="channel-panel" aria-label="Покупка частного канала">
+      <section class="card private-channel" id="private-channel">
+        <h2>Создать частный канал</h2>
+        <p class="sub">
+          Канал навсегда — 999 ₽. Заполни заявку, и администратор свяжется с тобой для подтверждения заказа.
+        </p>
+
+        <div class="price-option selected">
+          <span>
+            <strong>Навсегда</strong>
+            <small>999 ₽</small>
+          </span>
+        </div>
+
+        <form class="channel-form" id="channel-form">
+          <label>
+            Название канала
+            <input type="text" name="channel" maxlength="40" placeholder="Например, Команда Cherry" required>
+          </label>
+
+          <label>
+            Пароль на канал <span class="optional">(необязательно)</span>
+            <input type="text" name="password" maxlength="32" placeholder="Оставь пустым, если пароль не нужен">
+          </label>
+
+          <label>
+            Твой ник в TeamSpeak
+            <input type="text" name="nickname" maxlength="32" placeholder="Как найти тебя на сервере" required>
+          </label>
+
+          <label>
+            Контакт для связи
+            <input type="text" name="contact" maxlength="100" placeholder="Telegram, Discord или другой контакт" required>
+          </label>
+
+          <label class="agreement">
+            <input type="checkbox" name="agreement" required>
+            <span>Я понимаю, что заявка не создаёт канал автоматически: нужно дождаться подтверждения администратора.</span>
+          </label>
+
+          <button class="submit-request" type="submit">Отправить заявку</button>
+          <p class="form-note" id="form-note" aria-live="polite"></p>
+        </form>
+      </section>
+    </aside>
+
+    <section class="steps" aria-label="Как подключиться">
+      <article class="step">
+        <div class="number">ШАГ 01</div>
+        <h3>Установи TeamSpeak</h3>
+        <p>Скачай и установи клиент TeamSpeak на свой компьютер.</p>
+        <a class="download" href="https://www.teamspeak.com/en/downloads/" target="_blank" rel="noopener">Скачать TeamSpeak ↗</a>
+      </article>
+
+      <article class="step">
+        <div class="number">ШАГ 02</div>
+        <h3>Открой подключение</h3>
+        <p>В клиенте выбери «Подключения» → «Подключиться».</p>
+      </article>
+
+      <article class="step">
+        <div class="number">ШАГ 03</div>
+        <h3>Введи адрес</h3>
+        <p>Укажи <strong>2.26.119.212:9987</strong> или введи <strong>fplcs</strong> в поле адреса сервера и нажми «Подключиться».</p>
+      </article>
+    </section>
+
+    <section class="features" aria-label="Преимущества сервера">
+      <article class="feature">
+        <span class="feature-icon" aria-hidden="true">🎙</span>
+        <h3>Чистый голос</h3>
+        <p>Общайся с командой и координируй игру в голосовых каналах.</p>
+      </article>
+
+      <article class="feature">
+        <span class="feature-icon" aria-hidden="true">👥</span>
+        <h3>Играем вместе</h3>
+        <p>Находи напарников, собирай команду и присоединяйся к сообществу.</p>
+      </article>
+
+      <article class="feature">
+        <span class="feature-icon" aria-hidden="true">⚡</span>
+        <h3>Быстрое подключение</h3>
+        <p>Скопируй адрес или нажми кнопку подключения — и заходи на сервер.</p>
+      </article>
+    </section>
+  </main>
+
+  <button
+    class="viewer-toggle"
+    id="viewer-toggle"
+    type="button"
+    aria-expanded="false"
+    aria-controls="viewer-panel"
+  >Кто на сервере</button>
+
+  <aside class="viewer-panel" id="viewer-panel" aria-label="Пользователи TeamSpeak">
+    <h2>Кто сейчас на сервере</h2>
+    <div id="ts3viewer_1131403"></div>
+  </aside>
+
+  <button
+    class="secret-game-button"
+    id="secret-game-button"
+    type="button"
+    aria-label="Подключиться в браузере"
+    aria-controls="game-modal"
+    aria-expanded="false"
+    title="Подключиться в браузере"
+  >Подключиться в браузере</button>
+
+  <div class="game-modal" id="game-modal" aria-hidden="true">
+    <div class="game-modal-content" role="dialog" aria-modal="true" aria-label="WebSpeak">
+      <button class="game-close" id="game-close" type="button">Закрыть ✕</button>
+
+      <iframe
+        class="game-frame"
+        id="game-frame"
+        data-src="https://client.webspeak3.de/"
+        title="WebSpeak"
+        frameborder="0"
+        allow="microphone; camera; fullscreen"
+      ></iframe>
+    </div>
+  </div>
+
+  <footer class="wrap"><strong>FPLCS</strong> · by cherryzor</footer>
+
+  <script>
+    async function copyText(elementId, button) {
+      const text = document.getElementById(elementId).textContent.trim();
+
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch {
+        const input = document.createElement("textarea");
+        input.value = text;
+        input.style.position = "fixed";
+        input.style.opacity = "0";
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand("copy");
+        input.remove();
+      }
+
+      button.textContent = "Скопировано!";
+      setTimeout(() => button.textContent = "Копировать", 1500);
+    }
+
+    async function checkServerStatus() {
+      const dot = document.getElementById("status-dot");
+      const text = document.getElementById("status-text");
+
+      dot.className = "dot is-checking";
+      text.textContent = "Проверяем сервер…";
+
+      try {
+        const response = await fetch("/status.php", { cache: "no-store" });
+        const data = await response.json();
+
+        if (!response.ok || data.online !== true) {
+          throw new Error("Сервер недоступен");
+        }
+
+        dot.className = "dot is-online";
+        text.textContent = "Сервер онлайн";
+      } catch {
+        dot.className = "dot is-offline";
+        text.textContent = "Сервер офлайн";
+      }
+    }
+
+    checkServerStatus();
+    setInterval(checkServerStatus, 30000);
+
+    const viewerToggle = document.getElementById("viewer-toggle");
+    const viewerPanel = document.getElementById("viewer-panel");
+
+    viewerToggle.addEventListener("click", () => {
+      const isOpen = viewerPanel.classList.toggle("is-open");
+      viewerToggle.setAttribute("aria-expanded", String(isOpen));
+    });
+
+    const channelToggle = document.getElementById("channel-toggle");
+    const channelPanel = document.getElementById("channel-panel");
+
+    channelToggle.addEventListener("click", () => {
+      const isOpen = channelPanel.classList.toggle("is-open");
+      channelToggle.setAttribute("aria-expanded", String(isOpen));
+    });
+
+    const secretButton = document.getElementById("secret-game-button");
+    const gameModal = document.getElementById("game-modal");
+    const gameClose = document.getElementById("game-close");
+    const gameFrame = document.getElementById("game-frame");
+
+    function toggleGame(open) {
+      gameModal.classList.toggle("is-open", open);
+      gameModal.setAttribute("aria-hidden", String(!open));
+      secretButton.setAttribute("aria-expanded", String(open));
+
+      if (open && !gameFrame.getAttribute("src")) {
+        gameFrame.src = gameFrame.dataset.src;
+      }
+    }
+
+    secretButton.addEventListener("click", () => {
+      toggleGame(!gameModal.classList.contains("is-open"));
+    });
+
+    gameClose.addEventListener("click", () => toggleGame(false));
+
+    gameModal.addEventListener("click", (event) => {
+      if (event.target === gameModal) toggleGame(false);
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") toggleGame(false);
+    });
+
+    document.getElementById("channel-form").addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      const form = new FormData(this);
+      const message = [
+        "Заявка на частный канал TeamSpeak",
+        "Тариф: Навсегда — 999 ₽",
+        `Название канала: ${form.get("channel")}`,
+        `Пароль: ${form.get("password") || "не нужен"}`,
+        `Ник в TeamSpeak: ${form.get("nickname")}`,
+        `Контакт: ${form.get("contact")}`
+      ].join("\n");
+
+      const telegramUsername = "kaifniy";
+      const url = `https://t.me/${telegramUsername}?text=${encodeURIComponent(message)}`;
+
+      window.open(url, "_blank", "noopener,noreferrer");
+
+      document.getElementById("form-note").textContent =
+        "Открылся Telegram с заполненной заявкой. Проверь сообщение и отправь его администратору.";
+    });
+  </script>
+
+  <script src="https://static.tsviewer.com/short_expire/js/ts3viewer_loader.js"></script>
+  <script>
+    var ts3v_url_1 = "https://www.tsviewer.com/ts3viewer.php?ID=1131403&text=757575&text_size=12&text_family=1&text_s_color=000000&text_s_weight=normal&text_s_style=normal&text_s_variant=normal&text_s_decoration=none&text_i_color=&text_i_weight=normal&text_i_style=normal&text_i_variant=normal&text_i_decoration=none&text_c_color=&text_c_weight=normal&text_c_style=normal&text_c_variant=normal&text_c_decoration=none&text_u_color=000000&text_u_weight=normal&text_u_style=normal&text_u_variant=normal&text_u_decoration=none&text_s_color_h=&text_s_weight_h=bold&text_s_style_h=normal&text_s_variant_h=normal&text_s_decoration_h=none&text_i_color_h=000000&text_i_weight_h=bold&text_i_style_h=normal&text_i_variant_h=normal&text_i_decoration_h=none&text_c_color_h=&text_c_weight_h=normal&text_c_style_h=normal&text_c_variant_h=normal&text_c_decoration_h=none&text_u_color_h=&text_u_weight_h=bold&text_u_style_h=normal&text_u_variant_h=normal&text_u_decoration_h=none&iconset=default";
+
+    ts3v_display.init(ts3v_url_1, 1131403, 100);
+  </script>
+</body>
+</html>
