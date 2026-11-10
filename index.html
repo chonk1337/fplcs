@@ -58,6 +58,58 @@
       pointer-events: none;
     }
 
+    /* --- Декоративные персонажи на фоне --- */
+    .game-characters {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .game-characters img {
+      position: absolute;
+      bottom: 0;
+      height: auto;
+      opacity: 0.18;
+      pointer-events: none;
+      user-select: none;
+      filter: brightness(1.1);
+    }
+
+    /* Слева — бывшая центральная */
+    .game-characters .char-left {
+      left: -2vw;
+      width: min(42vw, 620px);
+    }
+
+    /* Справа — новая картинка */
+    .game-characters .char-right {
+      right: -2vw;
+      width: min(40vw, 580px);
+    }
+
+    /* По центру — бывшая левая */
+    .game-characters .char-center {
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(48vw, 720px);
+      opacity: 0.14;
+    }
+
+    @media (max-width: 900px) {
+      .game-characters .char-left { width: 55vw; opacity: 0.12; }
+      .game-characters .char-right { width: 52vw; opacity: 0.12; }
+      .game-characters .char-center { width: 65vw; opacity: 0.09; }
+    }
+
+    @media (max-width: 650px) {
+      .game-characters img { opacity: 0.07; }
+      .game-characters .char-left { width: 70vw; }
+      .game-characters .char-right { width: 65vw; }
+      .game-characters .char-center { width: 80vw; opacity: 0.06; }
+    }
+
     .wrap {
       width: min(100% - 40px, 1080px);
       margin: 0 auto;
@@ -716,6 +768,31 @@
   </style>
 </head>
 <body>
+  <!-- Декоративные персонажи на фоне: низ привязан к низу экрана -->
+  <div class="game-characters" aria-hidden="true">
+    <img
+      class="char-left"
+      src="https://mir-s3-cdn-cf.behance.net/project_modules/1400_webp/c7c5b0234110579.68bd45afe9534.png"
+      alt=""
+      loading="lazy"
+      onerror="this.style.display='none'"
+    >
+    <img
+      class="char-right"
+      src="https://mir-s3-cdn-cf.behance.net/project_modules/1400_webp/b1e266234110579.68bd45afeae29.png"
+      alt=""
+      loading="lazy"
+      onerror="this.style.display='none'"
+    >
+    <img
+      class="char-center"
+      src="https://mir-s3-cdn-cf.behance.net/project_modules/fs_webp/a3835d234110579.68bd45afe884d.png"
+      alt=""
+      loading="lazy"
+      onerror="this.style.display='none'"
+    >
+  </div>
+
   <canvas id="snow-canvas" aria-hidden="true"></canvas>
 
   <header class="wrap">
