@@ -139,6 +139,34 @@
       object-fit: contain;
     }
 
+    .header-nav {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .header-nav a.nav-link {
+      display: inline-block;
+      padding: 9px 14px;
+      color: var(--white);
+      background: #202329;
+      border: 1px solid #343840;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .3px;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: .2s;
+    }
+
+    .header-nav a.nav-link:hover {
+      color: #fff;
+      background: var(--orange);
+      border-color: var(--orange);
+      box-shadow: 0 5px 18px #ff4b1f33;
+    }
+
     .status {
       display: flex;
       align-items: center;
@@ -735,6 +763,7 @@
       .card { padding: 25px 20px; }
       .card::before { left: 20px; }
       .status { font-size: 11px; }
+      .header-nav a.nav-link { font-size: 11px; padding: 8px 11px; }
       .steps { margin-top: 20px; }
       .step { min-height: auto; }
       .hero p { font-size: 15px; }
@@ -760,6 +789,7 @@
       .value-row button { padding: 7px 6px; font-size: 11px; }
       .secret-game-button { font-size: 12px; padding: 11px 12px; }
       .snow-toggle { font-size: 11px; padding: 9px 12px; }
+      .header-nav a.nav-link { font-size: 10px; padding: 7px 9px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -807,9 +837,13 @@
       >
     </a>
 
-    <div class="status" id="server-status" aria-live="polite" aria-label="Статус TeamSpeak-сервера">
-      <span class="dot is-online" id="status-dot" aria-hidden="true"></span>
-      <span id="status-text">Сервер онлайн</span>
+    <div class="header-nav">
+      <a class="nav-link" href="players.html">Наши игроки</a>
+
+      <div class="status" id="server-status" aria-live="polite" aria-label="Статус TeamSpeak-сервера">
+        <span class="dot is-online" id="status-dot" aria-hidden="true"></span>
+        <span id="status-text">Сервер онлайн</span>
+      </div>
     </div>
   </header>
 
