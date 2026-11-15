@@ -87,6 +87,34 @@
       object-fit: contain;
     }
 
+    .header-nav {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .header-nav a.nav-link {
+      display: inline-block;
+      padding: 9px 14px;
+      color: var(--white);
+      background: #202329;
+      border: 1px solid #343840;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .3px;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: .2s;
+    }
+
+    .header-nav a.nav-link:hover {
+      color: #fff;
+      background: var(--orange);
+      border-color: var(--orange);
+      box-shadow: 0 5px 18px #ff4b1f33;
+    }
+
     .status {
       display: flex;
       align-items: center;
@@ -154,98 +182,146 @@
       line-height: 1.75;
     }
 
-    .players-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 16px;
-      max-width: 760px;
+    /* ===== Список-таблица ===== */
+
+    .players-list {
+      max-width: 860px;
       margin: 0 auto;
+      background:
+        radial-gradient(ellipse at 100% 0%, #ff4b1f0d, transparent 44%),
+        linear-gradient(145deg, #15171c, #0e0f12);
+      border: 1px solid #34363c;
+      border-radius: 18px;
+      box-shadow: 0 24px 80px #0008, inset 0 1px #ffffff08;
+      overflow: hidden;
     }
 
-    .player-card {
-      position: relative;
-      padding: 22px;
-      background: linear-gradient(145deg, #13151a, #0d0e11);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      transition: transform .2s, border-color .2s;
-    }
-
-    .player-card:hover {
-      transform: translateY(-3px);
-      border-color: #ff4b1f66;
-    }
-
-    /* Кликабельная карточка (если указан faceit) */
-    .player-card.is-link {
-      cursor: pointer;
-    }
-
-    .player-card.is-link:hover {
-      border-color: var(--orange);
-      box-shadow: 0 8px 28px #ff4b1f22;
-    }
-
-    .player-card.is-link:focus-visible {
-      outline: 2px solid var(--orange);
-      outline-offset: 3px;
-    }
-
-    .player-top {
-      display: flex;
+    .players-list-head {
+      display: grid;
+      grid-template-columns: 64px 1fr 120px 40px;
+      gap: 16px;
       align-items: center;
-      gap: 14px;
-      margin-bottom: 14px;
+      padding: 14px 22px;
+      color: var(--muted);
+      background: #ffffff04;
+      border-bottom: 1px solid var(--border);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
     }
 
-    .player-avatar {
-      width: 56px;
-      height: 56px;
-      flex: 0 0 56px;
-      object-fit: cover;
+    .players-list-head .col-elo { text-align: right; }
+    .players-list-head .col-arrow { text-align: center; }
+
+    .player-row {
+      display: grid;
+      grid-template-columns: 64px 1fr 120px 40px;
+      gap: 16px;
+      align-items: center;
+      padding: 16px 22px;
+      border-bottom: 1px solid var(--border);
+      transition: background .2s, border-color .2s;
+    }
+
+    .player-row:last-child { border-bottom: 0; }
+
+    .player-row.is-link { cursor: pointer; }
+
+    .player-row:hover {
+      background: #ff4b1f08;
+    }
+
+    .player-row.is-link:hover {
+      background: #ff4b1f10;
+      box-shadow: inset 3px 0 0 var(--orange);
+    }
+
+    .player-row:focus-visible {
+      outline: 2px solid var(--orange);
+      outline-offset: -2px;
+    }
+
+    .row-avatar {
+      position: relative;
+      width: 52px;
+      height: 52px;
       background: #090a0d;
       border: 1px solid #292c33;
       border-radius: 50%;
+      overflow: hidden;
+      flex: 0 0 52px;
     }
 
-    .player-name {
-      margin: 0;
-      font-size: 17px;
+    .row-avatar .avatar-fallback {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      color: var(--orange);
+      font-size: 20px;
+      font-weight: 800;
+      text-transform: uppercase;
+      user-select: none;
+    }
+
+    .row-avatar .player-avatar {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .row-avatar .player-avatar.is-broken { display: none; }
+
+    .row-main {
+      min-width: 0;
+    }
+
+    .row-name {
+      margin: 0 0 4px;
+      font-size: 16px;
+      font-weight: 700;
       overflow-wrap: anywhere;
     }
 
-    .player-elo {
-      display: inline-block;
-      margin-top: 4px;
-      padding: 3px 9px;
+    .row-desc {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+      overflow-wrap: anywhere;
+    }
+
+    .row-elo {
+      justify-self: end;
+      padding: 5px 12px;
       color: var(--orange);
       background: #ff4b1f14;
       border: 1px solid #ff4b1f30;
       border-radius: 999px;
-      font-size: 12px;
-      font-weight: 700;
+      font-size: 13px;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
     }
 
-    .player-desc {
-      margin: 0;
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.6;
-      overflow-wrap: anywhere;
-      white-space: pre-wrap;
-    }
-
-    .player-faceit-hint {
-      display: inline-block;
-      margin-top: 12px;
+    .row-arrow {
+      justify-self: center;
       color: var(--orange);
-      font-size: 12px;
-      font-weight: 700;
-      opacity: .85;
+      font-size: 16px;
+      opacity: .5;
+      transition: opacity .2s, transform .2s;
+    }
+
+    .player-row.is-link:hover .row-arrow {
+      opacity: 1;
+      transform: translateX(2px);
     }
 
     .empty-state {
-      max-width: 760px;
+      max-width: 860px;
       margin: 0 auto;
       padding: 34px;
       color: var(--muted);
@@ -254,6 +330,18 @@
       border-radius: 14px;
       text-align: center;
       font-size: 15px;
+    }
+
+    .error-banner {
+      max-width: 860px;
+      margin: 0 auto 20px;
+      padding: 16px 20px;
+      color: #ffb3b3;
+      background: #2a0e0e;
+      border: 1px solid #ff4b4b55;
+      border-radius: 12px;
+      font-size: 14px;
+      line-height: 1.5;
     }
 
     footer {
@@ -266,9 +354,41 @@
 
     footer strong { color: var(--white); }
 
+    /* ===== Мобильная версия: ряд превращается в блок ===== */
+
     @media (max-width: 650px) {
       main { padding-top: 40px; }
       .hero p { font-size: 15px; }
+      .header-nav a.nav-link { font-size: 11px; padding: 8px 11px; }
+
+      .players-list-head {
+        display: none;
+      }
+
+      .player-row {
+        grid-template-columns: 52px 1fr auto;
+        grid-template-areas:
+          "avatar main elo"
+          "avatar desc desc";
+        gap: 6px 14px;
+        padding: 16px 18px;
+      }
+
+      .row-avatar { grid-area: avatar; align-self: start; }
+      .row-main { grid-area: main; }
+      .row-elo { grid-area: elo; align-self: start; font-size: 12px; padding: 4px 10px; }
+
+      .row-desc {
+        grid-area: desc;
+        margin: 0;
+      }
+
+      .row-arrow { display: none; }
+    }
+
+    @media (max-width: 380px) {
+      .header-nav a.nav-link { font-size: 10px; padding: 7px 9px; }
+      .player-row { padding: 14px 14px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -289,9 +409,13 @@
       >
     </a>
 
-    <div class="status" aria-label="Количество игроков">
-      <span class="dot" aria-hidden="true"></span>
-      <span id="players-count">Игроков: 0</span>
+    <div class="header-nav">
+      <a class="nav-link" href="index.html">На главную</a>
+
+      <div class="status" aria-label="Количество игроков">
+        <span class="dot" aria-hidden="true"></span>
+        <span id="players-count">Игроков: 0</span>
+      </div>
     </div>
   </header>
 
@@ -299,10 +423,21 @@
     <section class="hero">
       <div class="eyebrow">Состав сообщества</div>
       <h1>Игроки FPLCS</h1>
-      <p>Участники нашего TeamSpeak-сервера: ник, ELO и короткое описание. Список отсортирован по ELO — сильнейшие сверху. Клик по карточке открывает профиль FACEIT.</p>
+      <p>Участники нашего TeamSpeak-сервера. Список отсортирован по ELO — сильнейшие сверху. Клик по строке открывает профиль FACEIT.</p>
     </section>
 
-    <div class="players-grid" id="players-grid"></div>
+    <div id="error-banner" class="error-banner" hidden></div>
+
+    <div class="players-list" id="players-list">
+      <div class="players-list-head" aria-hidden="true">
+        <span></span>
+        <span>Игрок / описание</span>
+        <span class="col-elo">ELO</span>
+        <span class="col-arrow"></span>
+      </div>
+      <div id="players-body"></div>
+    </div>
+
     <div class="empty-state" id="empty-state" hidden>
       Список пока пуст.
     </div>
@@ -317,15 +452,12 @@
        Каждый игрок — объект в фигурных скобках:
        {
          nickname: "Ник в TeamSpeak",
-         elo: 1250,                          // число
-         avatar: "https://ссылка/на/картинку.png",  // можно оставить ""
-         description: "Пара слов об игроке", // можно оставить ""
-         faceit: "https://www.faceit.com/ru/players/Ник"  // ссылка на профиль
+         elo: 1250,
+         avatar: "https://ссылка/на/картинку.png",
+         description: "Пара слов об игроке",
+         faceit: "https://www.faceit.com/ru/players/Ник"
        }
        Не забудь запятую между объектами.
-       Порядок в массиве не важен — на странице всё равно
-       отсортируется по ELO (по убыванию).
-       Если faceit оставить пустым ("") — карточка будет некликабельной.
        ============================================================ */
 
     const PLAYERS = [
@@ -391,9 +523,11 @@
        НИЖЕ — КОД ОТРИСОВКИ. ЛУЧШЕ НЕ ТРОГАТЬ.
        ============================================================ */
 
-    const grid = document.getElementById("players-grid");
+    const bodyEl = document.getElementById("players-body");
+    const listEl = document.getElementById("players-list");
     const emptyState = document.getElementById("empty-state");
     const countEl = document.getElementById("players-count");
+    const errorBanner = document.getElementById("error-banner");
 
     function escapeHtml(str) {
       return String(str ?? "")
@@ -404,7 +538,7 @@
         .replace(/'/g, "&#39;");
     }
 
-    function safeAvatarUrl(url) {
+    function normalizeUrl(url) {
       const trimmed = String(url || "").trim();
       if (!trimmed) return "";
       try {
@@ -412,30 +546,17 @@
         if (parsed.protocol === "http:" || parsed.protocol === "https:") {
           return parsed.href;
         }
-      } catch {}
-      return "";
+        return "";
+      } catch {
+        return trimmed;
+      }
     }
 
-    // Безопасная проверка ссылки на FACEIT (http/https)
-    function safeFaceitUrl(url) {
-      const trimmed = String(url || "").trim();
-      if (!trimmed) return "";
-      try {
-        const parsed = new URL(trimmed);
-        if (parsed.protocol === "http:" || parsed.protocol === "https:") {
-          return parsed.href;
-        }
-      } catch {}
-      return "";
-    }
-
-    // Приводим ELO к числу для сортировки
     function eloValue(player) {
       const n = Number(player?.elo);
       return Number.isFinite(n) ? n : -Infinity;
     }
 
-    // Сортировка: по ELO убыв., при равенстве — по нику (A→Z)
     function sortPlayers(list) {
       return [...list].sort((a, b) => {
         const diff = eloValue(b) - eloValue(a);
@@ -444,61 +565,95 @@
       });
     }
 
-    function render() {
-      const list = Array.isArray(PLAYERS) ? PLAYERS : [];
-      const sorted = sortPlayers(list);
-
-      countEl.textContent = `Игроков: ${sorted.length}`;
-      emptyState.hidden = sorted.length > 0;
-
-      grid.innerHTML = sorted.map((p) => {
-        const avatar = safeAvatarUrl(p.avatar);
-        const faceit = safeFaceitUrl(p.faceit);
-
-        const avatarHtml = avatar
-          ? `<img class="player-avatar" src="${escapeHtml(avatar)}" alt="" onerror="this.style.visibility='hidden'">`
-          : `<img class="player-avatar" alt="" style="visibility:hidden">`;
-
-        const cardClass = faceit ? "player-card is-link" : "player-card";
-        const linkAttrs = faceit
-          ? ` data-faceit="${escapeHtml(faceit)}" role="link" tabindex="0" aria-label="Открыть профиль FACEIT игрока ${escapeHtml(p.nickname)}"`
-          : "";
-
-        const hintHtml = faceit
-          ? `<span class="player-faceit-hint">Открыть профиль FACEIT ↗</span>`
-          : "";
-
-        return `
-          <article class="${cardClass}"${linkAttrs}>
-            <div class="player-top">
-              ${avatarHtml}
-              <div>
-                <h3 class="player-name">${escapeHtml(p.nickname)}</h3>
-                <span class="player-elo">ELO ${escapeHtml(p.elo)}</span>
-              </div>
-            </div>
-            ${p.description ? `<p class="player-desc">${escapeHtml(p.description)}</p>` : ""}
-            ${hintHtml}
-          </article>
-        `;
-      }).join("");
+    function firstLetter(name) {
+      const s = String(name || "").trim();
+      return s ? s.charAt(0) : "?";
     }
 
-    // Клик по карточке → открыть FACEIT в новой вкладке
-    grid.addEventListener("click", (event) => {
-      const card = event.target.closest(".player-card.is-link");
-      if (!card) return;
-      const url = card.dataset.faceit;
+    function renderRow(p) {
+      const safeName = escapeHtml(p?.nickname ?? "");
+      const avatar = normalizeUrl(p?.avatar);
+      const faceit = normalizeUrl(p?.faceit);
+      const letter = escapeHtml(firstLetter(p?.nickname));
+
+      const avatarHtml = `
+        <div class="row-avatar">
+          <span class="avatar-fallback" aria-hidden="true">${letter}</span>
+          ${avatar
+            ? `<img class="player-avatar" src="${escapeHtml(avatar)}" alt="" loading="lazy" onerror="this.classList.add('is-broken')">`
+            : ""}
+        </div>
+      `;
+
+      const rowClass = faceit ? "player-row is-link" : "player-row";
+      const linkAttrs = faceit
+        ? ` data-faceit="${escapeHtml(faceit)}" role="link" tabindex="0" aria-label="Открыть профиль FACEIT игрока ${safeName}"`
+        : "";
+
+      const descHtml = p?.description
+        ? `<p class="row-desc">${escapeHtml(p.description)}</p>`
+        : "";
+
+      const arrowHtml = faceit
+        ? `<span class="row-arrow" aria-hidden="true">↗</span>`
+        : `<span class="row-arrow" aria-hidden="true"></span>`;
+
+      return `
+        <article class="${rowClass}"${linkAttrs}>
+          ${avatarHtml}
+          <div class="row-main">
+            <h3 class="row-name">${safeName}</h3>
+            ${descHtml}
+          </div>
+          <span class="row-elo">ELO ${escapeHtml(p?.elo)}</span>
+          ${arrowHtml}
+        </article>
+      `;
+    }
+
+    function render() {
+      try {
+        const list = Array.isArray(PLAYERS) ? PLAYERS : [];
+        const sorted = sortPlayers(list);
+
+        countEl.textContent = `Игроков: ${sorted.length}`;
+        emptyState.hidden = sorted.length > 0;
+        listEl.hidden = sorted.length === 0;
+        errorBanner.hidden = true;
+        errorBanner.textContent = "";
+
+        const rows = [];
+        for (let i = 0; i < sorted.length; i++) {
+          try {
+            rows.push(renderRow(sorted[i]));
+          } catch (err) {
+            console.error(`Ошибка в игроке #${i}:`, err, sorted[i]);
+          }
+        }
+
+        bodyEl.innerHTML = rows.join("");
+      } catch (err) {
+        console.error("Ошибка рендера списка:", err);
+        errorBanner.hidden = false;
+        errorBanner.textContent =
+          "Не удалось отрисовать список игроков: " + err.message +
+          ". Проверь массив PLAYERS — вероятно, там синтаксическая ошибка.";
+      }
+    }
+
+    bodyEl.addEventListener("click", (event) => {
+      const row = event.target.closest(".player-row.is-link");
+      if (!row) return;
+      const url = row.dataset.faceit;
       if (url) window.open(url, "_blank", "noopener,noreferrer");
     });
 
-    // Клавиатура: Enter/Space на карточке → открыть FACEIT
-    grid.addEventListener("keydown", (event) => {
+    bodyEl.addEventListener("keydown", (event) => {
       if (event.key !== "Enter" && event.key !== " ") return;
-      const card = event.target.closest(".player-card.is-link");
-      if (!card) return;
+      const row = event.target.closest(".player-row.is-link");
+      if (!row) return;
       event.preventDefault();
-      const url = card.dataset.faceit;
+      const url = row.dataset.faceit;
       if (url) window.open(url, "_blank", "noopener,noreferrer");
     });
 
