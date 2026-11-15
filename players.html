@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#08090b">
+  <title>FPLCS — Игроки</title>
+
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="favicon.png">
+
+  <style>
+    html {
+      scrollbar-color: #ff4b1f99 transparent;
+      scrollbar-width: thin;
+    }
+
+    html::-webkit-scrollbar { width: 10px; }
+    html::-webkit-scrollbar-track { background: transparent; }
+    html::-webkit-scrollbar-thumb {
+      background: #ff4b1f99;
+      border: 3px solid transparent;
+      border-radius: 999px;
+      background-clip: content-box;
+    }
+    html::-webkit-scrollbar-thumb:hover { background-color: #ff4b1f; }
+
+    :root {
+      --bg: #08090b;
+      --orange: #ff4b1f;
+      --white: #f4f5f7;
+      --muted: #a1a5ad;
+      --border: #282b31;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      overflow-x: hidden;
+      background:
+        radial-gradient(ellipse at 50% -12%, #492014 0, transparent 42%),
+        radial-gradient(circle at 8% 42%, #ff4b1f0b 0, transparent 26%),
+        radial-gradient(circle at 94% 70%, #ff4b1f0a 0, transparent 25%),
+        var(--bg);
+      color: var(--white);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body::before {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background-image:
+        linear-gradient(#ffffff05 1px, transparent 1px),
+        linear-gradient(90deg, #ffffff05 1px, transparent 1px);
+      background-size: 48px 48px;
+      content: "";
+      mask-image: linear-gradient(to bottom, #000, transparent 75%);
+      pointer-events: none;
+    }
+
+    .wrap {
+      width: min(100% - 40px, 1080px);
+      margin: 0 auto;
+    }
+
+    header {
+      height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+    }
+
+    .brand img.header-logo {
+      display: block;
+      width: 24px;
+      height: 24px;
+      object-fit: contain;
+    }
+
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 9px 13px;
+      color: #c4c8ce;
+      background: #ffffff06;
+      border: 1px solid #ffffff12;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .3px;
+      white-space: nowrap;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      flex: 0 0 8px;
+      border-radius: 50%;
+      background: #4bd783;
+      box-shadow: 0 0 12px #4bd78388;
+    }
+
+    main { padding: 50px 0 68px; }
+
+    .hero {
+      max-width: 760px;
+      margin: 0 auto 40px;
+      text-align: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+      color: var(--orange);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before,
+    .eyebrow::after {
+      width: 22px;
+      height: 1px;
+      background: var(--orange);
+      content: "";
+      opacity: .7;
+    }
+
+    .hero h1 {
+      margin: 0 0 14px;
+      font-size: clamp(28px, 5vw, 42px);
+      line-height: 1.15;
+    }
+
+    .hero p {
+      margin: 0 auto;
+      max-width: 570px;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.75;
+    }
+
+    .players-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 16px;
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    .player-card {
+      position: relative;
+      padding: 22px;
+      background: linear-gradient(145deg, #13151a, #0d0e11);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      transition: transform .2s, border-color .2s;
+    }
+
+    .player-card:hover {
+      transform: translateY(-3px);
+      border-color: #ff4b1f66;
+    }
+
+    /* Кликабельная карточка (если указан faceit) */
+    .player-card.is-link {
+      cursor: pointer;
+    }
+
+    .player-card.is-link:hover {
+      border-color: var(--orange);
+      box-shadow: 0 8px 28px #ff4b1f22;
+    }
+
+    .player-card.is-link:focus-visible {
+      outline: 2px solid var(--orange);
+      outline-offset: 3px;
+    }
+
+    .player-top {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .player-avatar {
+      width: 56px;
+      height: 56px;
+      flex: 0 0 56px;
+      object-fit: cover;
+      background: #090a0d;
+      border: 1px solid #292c33;
+      border-radius: 50%;
+    }
+
+    .player-name {
+      margin: 0;
+      font-size: 17px;
+      overflow-wrap: anywhere;
+    }
+
+    .player-elo {
+      display: inline-block;
+      margin-top: 4px;
+      padding: 3px 9px;
+      color: var(--orange);
+      background: #ff4b1f14;
+      border: 1px solid #ff4b1f30;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .player-desc {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+      overflow-wrap: anywhere;
+      white-space: pre-wrap;
+    }
+
+    .player-faceit-hint {
+      display: inline-block;
+      margin-top: 12px;
+      color: var(--orange);
+      font-size: 12px;
+      font-weight: 700;
+      opacity: .85;
+    }
+
+    .empty-state {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 34px;
+      color: var(--muted);
+      background: #0d0e12;
+      border: 1px dashed var(--border);
+      border-radius: 14px;
+      text-align: center;
+      font-size: 15px;
+    }
+
+    footer {
+      padding: 24px 0;
+      border-top: 1px solid var(--border);
+      color: #777b84;
+      text-align: center;
+      font-size: 13px;
+    }
+
+    footer strong { color: var(--white); }
+
+    @media (max-width: 650px) {
+      main { padding-top: 40px; }
+      .hero p { font-size: 15px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="wrap">
+    <a class="brand" href="index.html" aria-label="FPLCS — главная">
+      <img
+        class="header-logo"
+        src="icons8-faceit-24.png"
+        alt="Логотип FACEIT"
+      >
+    </a>
+
+    <div class="status" aria-label="Количество игроков">
+      <span class="dot" aria-hidden="true"></span>
+      <span id="players-count">Игроков: 0</span>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <div class="eyebrow">Состав сообщества</div>
+      <h1>Игроки FPLCS</h1>
+      <p>Участники нашего TeamSpeak-сервера: ник, ELO и короткое описание. Список отсортирован по ELO — сильнейшие сверху. Клик по карточке открывает профиль FACEIT.</p>
+    </section>
+
+    <div class="players-grid" id="players-grid"></div>
+    <div class="empty-state" id="empty-state" hidden>
+      Список пока пуст.
+    </div>
+  </main>
+
+  <footer class="wrap"><strong>FPLCS</strong> · by cherryzor</footer>
+
+  <script>
+    /* ============================================================
+       СПИСОК ИГРОКОВ — РЕДАКТИРУЙ ТОЛЬКО ЭТОТ БЛОК
+       ============================================================
+       Каждый игрок — объект в фигурных скобках:
+       {
+         nickname: "Ник в TeamSpeak",
+         elo: 1250,                          // число
+         avatar: "https://ссылка/на/картинку.png",  // можно оставить ""
+         description: "Пара слов об игроке", // можно оставить ""
+         faceit: "https://www.faceit.com/ru/players/Ник"  // ссылка на профиль
+       }
+       Не забудь запятую между объектами.
+       Порядок в массиве не важен — на странице всё равно
+       отсортируется по ELO (по убыванию).
+       Если faceit оставить пустым ("") — карточка будет некликабельной.
+       ============================================================ */
+
+    const PLAYERS = [
+      {
+        nickname: "cherryzor",
+        elo: 2100,
+        avatar: "https://example.com/cherryzor.png",
+        description: "Основатель сервера. Играет на всех позициях.",
+        faceit: "https://www.faceit.com/ru/players/example"
+      },
+      {
+        nickname: "PlayerOne",
+        elo: 1850,
+        avatar: "",
+        description: "Любит агрессивный стиль игры.",
+        faceit: "https://www.faceit.com/ru/players/example"
+      },
+      {
+        nickname: "NoScope",
+        elo: 1600,
+        avatar: "",
+        description: "Снайпер. Иногда попадает.",
+        faceit: "https://www.faceit.com/ru/players/example"
+      }
+    ];
+
+    /* ============================================================
+       НИЖЕ — КОД ОТРИСОВКИ. ЛУЧШЕ НЕ ТРОГАТЬ.
+       ============================================================ */
+
+    const grid = document.getElementById("players-grid");
+    const emptyState = document.getElementById("empty-state");
+    const countEl = document.getElementById("players-count");
+
+    function escapeHtml(str) {
+      return String(str ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function safeAvatarUrl(url) {
+      const trimmed = String(url || "").trim();
+      if (!trimmed) return "";
+      try {
+        const parsed = new URL(trimmed);
+        if (parsed.protocol === "http:" || parsed.protocol === "https:") {
+          return parsed.href;
+        }
+      } catch {}
+      return "";
+    }
+
+    // Безопасная проверка ссылки на FACEIT (http/https)
+    function safeFaceitUrl(url) {
+      const trimmed = String(url || "").trim();
+      if (!trimmed) return "";
+      try {
+        const parsed = new URL(trimmed);
+        if (parsed.protocol === "http:" || parsed.protocol === "https:") {
+          return parsed.href;
+        }
+      } catch {}
+      return "";
+    }
+
+    // Приводим ELO к числу для сортировки
+    function eloValue(player) {
+      const n = Number(player?.elo);
+      return Number.isFinite(n) ? n : -Infinity;
+    }
+
+    // Сортировка: по ELO убыв., при равенстве — по нику (A→Z)
+    function sortPlayers(list) {
+      return [...list].sort((a, b) => {
+        const diff = eloValue(b) - eloValue(a);
+        if (diff !== 0) return diff;
+        return String(a?.nickname ?? "").localeCompare(String(b?.nickname ?? ""), "ru");
+      });
+    }
+
+    function render() {
+      const list = Array.isArray(PLAYERS) ? PLAYERS : [];
+      const sorted = sortPlayers(list);
+
+      countEl.textContent = `Игроков: ${sorted.length}`;
+      emptyState.hidden = sorted.length > 0;
+
+      grid.innerHTML = sorted.map((p) => {
+        const avatar = safeAvatarUrl(p.avatar);
+        const faceit = safeFaceitUrl(p.faceit);
+
+        const avatarHtml = avatar
+          ? `<img class="player-avatar" src="${escapeHtml(avatar)}" alt="" onerror="this.style.visibility='hidden'">`
+          : `<img class="player-avatar" alt="" style="visibility:hidden">`;
+
+        const cardClass = faceit ? "player-card is-link" : "player-card";
+        const linkAttrs = faceit
+          ? ` data-faceit="${escapeHtml(faceit)}" role="link" tabindex="0" aria-label="Открыть профиль FACEIT игрока ${escapeHtml(p.nickname)}"`
+          : "";
+
+        const hintHtml = faceit
+          ? `<span class="player-faceit-hint">Открыть профиль FACEIT ↗</span>`
+          : "";
+
+        return `
+          <article class="${cardClass}"${linkAttrs}>
+            <div class="player-top">
+              ${avatarHtml}
+              <div>
+                <h3 class="player-name">${escapeHtml(p.nickname)}</h3>
+                <span class="player-elo">ELO ${escapeHtml(p.elo)}</span>
+              </div>
+            </div>
+            ${p.description ? `<p class="player-desc">${escapeHtml(p.description)}</p>` : ""}
+            ${hintHtml}
+          </article>
+        `;
+      }).join("");
+    }
+
+    // Клик по карточке → открыть FACEIT в новой вкладке
+    grid.addEventListener("click", (event) => {
+      const card = event.target.closest(".player-card.is-link");
+      if (!card) return;
+      const url = card.dataset.faceit;
+      if (url) window.open(url, "_blank", "noopener,noreferrer");
+    });
+
+    // Клавиатура: Enter/Space на карточке → открыть FACEIT
+    grid.addEventListener("keydown", (event) => {
+      if (event.key !== "Enter" && event.key !== " ") return;
+      const card = event.target.closest(".player-card.is-link");
+      if (!card) return;
+      event.preventDefault();
+      const url = card.dataset.faceit;
+      if (url) window.open(url, "_blank", "noopener,noreferrer");
+    });
+
+    render();
+  </script>
+</body>
+</html>
